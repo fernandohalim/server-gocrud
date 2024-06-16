@@ -10,4 +10,5 @@ func ProductRoutes(r *mux.Router) {
 	router := r.PathPrefix("/products").Subrouter()
 
 	router.HandleFunc("", productcontroller.Index).Methods("GET")
+	router.HandleFunc("", productcontroller.Create).Methods("POST")
 }
