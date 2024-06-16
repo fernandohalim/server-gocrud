@@ -20,5 +20,17 @@ func main() {
 
 	log.Println("Server is running on port", config.ENV.PORT)
 
-	http.ListenAndServe(fmt.Sprintf(":%v", config.ENV.PORT), r)
+	http.ListenAndServe(fmt.Sprintf(":%v", config.ENV.PORT), corsMiddleware(r))
+}
+
+func corsMiddleware(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		if r.Method == "OPTIONS" {
+			return
+		}
+		h.ServeHTTP(w, r)
+	})
 }
